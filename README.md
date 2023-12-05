@@ -1,4 +1,4 @@
-# s05-finalproject-group4
+# Final Group Project Python
 Book Scraper Book Scraper is a Python tool for scraping book information from Books to Scrape. It provides various options for filtering and manipulating the scraped data.
 
 Table of Contents Introduction Features Installation Usage Technical details for GSheets Testing Contributing Introduction Book Scraper is a command-line tool that allows you to scrape book data from the provided website. You can specify the number of books to scrape, filter books by various criteria, search for books by title, and more. For detailed information on how to use Book Scraper, please refer to the Usage section.
