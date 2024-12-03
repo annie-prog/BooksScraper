@@ -1,24 +1,150 @@
-# Final Group Project Python
-Book Scraper Book Scraper is a Python tool for scraping book information from Books to Scrape. It provides various options for filtering and manipulating the scraped data.
+# 📚 Final Group Project: **Book Scraper**
+Book Scraper is a Python tool for extracting book information from [Books to Scrape](https://books.toscrape.com/). It offers robust filtering, sorting, and data manipulation features, including pintegration with Google Sheets for easy data export.
 
-Table of Contents Introduction Features Installation Usage Technical details for GSheets Testing Contributing Introduction Book Scraper is a command-line tool that allows you to scrape book data from the provided website. You can specify the number of books to scrape, filter books by various criteria, search for books by title, and more. For detailed information on how to use Book Scraper, please refer to the Usage section.
+## 📖 Table of Contents
+- [Introduction](#-🌟-introduction)
+- [Features](#✨-features)
+- [Installation](#⚙️-installation)
+- [Usage](#🚀-usage)
+- [Technical Details for Google Sheets](#📝-technical-details-for-google-sheets)
+- [Testing](#🧪-testing)
+- [Contributing](#🤝-contributing)
 
-Features Scrape book data from Books to Scrape. Filter books by availability, rating, and price. Sort books by availability, rating, price, title ascending or descending. Search for books by title. Extract book information into Google Sheets. Save scraped data to a JSON file. Installation To use Book Scraper, follow these steps:
+## 🌟 Introduction
+**Book Scraper** is a command-line tool designed to scrape and process book data. You can:
 
-Clone this repository to your local machine. This part uses virtualenv with python3. Install the required dependencies by running the following command: pip install -r requirements.txt Configure your Google Sheets API credentials. Replace the GOOGLE_SHEETS_KEY environment variable with the path to your credentials JSON file. For detailed information on how to set up the Google Sheets, please refer to the Technical details for GSheets section. Usage Valid inputs must include at least one of the following:
+- Extract detailed information about books.
+- Apply filters such as rating, price, and availability.
+- Sort results dynamically.
+- Export data to **Google Sheets** or save it as a **JSON** file.
 
-b - number of books g - list of search genres s - list ordered {ascending, descending} f - list of filters d - list of keywords to search for in the description t - book title search (only one) w - list of desired book titles to search (from a given title list JSON file) Book Scraper provides several command-line options to customize your scraping experience. Here are some examples:
+For a complete list of options, refer to the [Usage](#🚀-usage) section.
 
-python main.py -b 50 -g Science -s rating ascending python main.py -b 24 -g Classics -f "rating < 3" python main.py -b 60 -g Science -f "available =14, rating < 3" -d "book" python main.py -g Science -t "Book Title" python main.py -w wanted_books.json For more detailed information on available options and usage, run:
+## ✨ Features
+- Scrape books from [Books to Scrape](https://books.toscrape.com/).
+- Filter results by:
+  - **Availability**
+  - **Rating**
+  - **Price**
+- Sort results by:
+  - Title (Ascending/Descending)
+  - Rating
+  - Availability
+- Search for books:
+  - By title
+  - Using keywords in descriptions
+- Export data to:
+  - **Google Sheets**
+  - **JSON** files for local storage.
 
-python main.py -h Technical details for GSheets Book Scraper includes functionality to export scraped book data to Google Sheets. To set up and use this feature, follow these technical details:
+## ⚙️ Installation
+### Prerequisites:
+- Python 3.10+
+- pip (Python package manager)
+### Steps:
+1. Clone the repository:
 
-Google Sheets API Credentials You need to have a Google Cloud project and enable the Google Sheets API for it. Follow the Google Sheets API Quickstart Guide to create a project and enable the API. Once you've enabled the Google Sheets API, you need to create credentials. Go to the Google Cloud Console, select your project, and navigate to "APIs & Services" > "Credentials." Click on "Create credentials" and select "Service Account Key." Follow the prompts to create a service account key, choose the "Editor" role, and generate a JSON key file. Save this JSON key file securely. Rename the JSON key file to something meaningful, e.g., gsheets-credentials.json, and keep it in a secure location. Do not share this file or commit it to version control. Set the environment variable GOOGLE_SHEETS_KEY to the path of the JSON key file you generated. You can do this in your shell or by editing your project's environment variables. Usage Once you've configured the Google Sheets API credentials, you can use the Google Sheets export functionality as follows:
+```
+git clone https://github.com/your-username/book-scraper.git
+cd book-scraper
+```
 
-After scraping book data using Book Scraper, you can export the data to a Google Sheets worksheet using the GoogleSheetsHandler.write_to_worksheet(scraped_books) method. The data will be written to the Google Sheets worksheet specified in the SAMPLE_SPREADSHEET_ID variable within the GoogleSheetsHandler class. The data will overwrite any existing data in the specified worksheet. Be cautious when using this functionality to avoid data loss. Make sure that the Google Sheets API is enabled, the credentials file is correctly set in the GOOGLE_SHEETS_KEY environment variable, and your service account has the necessary permissions to write to the specified worksheet. You can customize the worksheet range and values as needed by modifying the target_range and body parameters when calling the sheet.values().update method within the write_to_worksheet function. That's it! You can now easily export scraped book data to Google Sheets using Book Scraper. Testing Book Scraper includes a suite of unit tests to ensure the correctness of its components. To run the tests, use the following command:
+2. Create a virtual environment:
 
-python -m unittest test_book_scraper.py This command will execute the test cases for the BookScraper class, ArgumentParser class, and related functionality.
+```
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-Contributing If you'd like to contribute to Book Scraper, please follow these guidelines:
+3. Install dependencies:
 
-Fork the repository. Create a new branch for your feature or bug fix. Make your changes and submit a pull request. Ensure your code is well-documented and follows PEP 8 coding standards.
+```
+pip install -r requirements.txt
+```
+
+4. Set up Google Sheets API credentials. Refer to the [Technical Details for Google Sheets](#📝-technical-details-for-google-sheets) section.
+
+## 🚀 Usage
+Run **Book Scraper** with various options:
+
+```
+python main.py -b <number_of_books> -g <genre> -f <filters> -s <sort_order>
+```
+
+### Examples:
+1. Scrape 50 books in the Science genre, sorted by rating:
+
+```
+python main.py -b 50 -g Science -s "rating ascending"
+```
+
+2. Filter by rating and availability:
+
+```
+python main.py -b 24 -f "rating < 3, available > 10"
+```
+
+3. Search by title:
+
+```
+python main.py -g Classics -t "Book Title"
+```
+
+For detailed help:
+
+```
+python main.py -h
+```
+
+## 📝 Technical Details for Google Sheets
+### Setup:
+1. Enable the Google Sheets API:
+   - Follow this guide to enable the API.
+2. Create service account credentials:
+   - Save the JSON key file (e.g., gsheets-credentials.json).
+3. Set the environment variable:
+
+```
+export GOOGLE_SHEETS_KEY=/path/to/gsheets-credentials.json
+```
+
+_(On Windows, use set instead of export.)_ 
+
+### Export Data:
+After scraping, use the following function to write data to a Google Sheet:
+
+```
+GoogleSheetsHandler.write_to_worksheet(scraped_books)
+```
+
+Ensure you configure **SAMPLE_SPREADSHEET_ID** within the script to point to your Google Sheet.
+
+## 🧪 Testing
+Run the unit tests to validate functionality:
+
+```
+python -m unittest test_book_scraper.py
+```
+
+This will test key components like:
+
+- BookScraper functionality
+- Command-line argument parsing
+- Google Sheets integration
+
+## 🤝 Contributing
+We welcome contributions! Please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch:
+
+```
+git checkout -b feature/my-feature
+```
+
+3. Commit your changes and submit a pull request.
+
+Ensure your code adheres to [PEP 8](https://pep8.org/) standards and includes appropriate documentation.
+
+## 📧 Contact
+For issues, suggestions, or feedback, feel free to open an issue or contact us directly.
