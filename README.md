@@ -46,7 +46,7 @@ For a complete list of options, refer to the [Usage](#🚀-usage) section.
 
 ```
 git clone https://github.com/your-username/book-scraper.git
-cd book-scraper
+cd BooksScraper
 ```
 
 2. Create a virtual environment:
