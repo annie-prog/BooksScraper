@@ -25,22 +25,22 @@ class ArgumentParser:
             -w (search for book from list of book titles)
         """
 
-        self.__parser = argparse.ArgumentParser(description='''
+        self.parser = argparse.ArgumentParser(description='''
         This is tool to scrape books from http://books.toscrape.com/index.html.
         You have different options for filtering and manipulating the books.
         For more info type main.py -h
         ''')
 
-        self.__mutually_exclusive_args_group = self.__parser.add_mutually_exclusive_group()
+        self.__mutually_exclusive_args_group = self.parser.add_mutually_exclusive_group()
         self.__create_arguments()
         self.__extract_genres_from_page()
 
     def return_parsed_arguments(self):
-        args = self.__parser.parse_args()
+        args = self.parser.parse_args()
         for el in args.__dict__:
             if args.__dict__[el]:
                 return args
-        raise self.__parser.error('You must use at least one flag')
+        raise self.parser.error('You must use at least one flag')
 
     @staticmethod
     def _custom_positive_int(argument):
@@ -157,7 +157,7 @@ class ArgumentParser:
             help='Get given number of books'
         )
 
-        self.__parser.add_argument(
+        self.parser.add_argument(
             '-g',
             '--genres',
             type=str,
@@ -167,7 +167,7 @@ class ArgumentParser:
             help='Search only in given genres'
         )
 
-        self.__parser.add_argument(
+        self.parser.add_argument(
             '-s',
             '--sorting',
             type=self._custom_sorting_list,
@@ -176,7 +176,7 @@ class ArgumentParser:
             help='Sort the books by some stats'
         )
 
-        self.__parser.add_argument(
+        self.parser.add_argument(
             '-f',
             '--filters',
             type=self._custom_filtering_list,
@@ -185,7 +185,7 @@ class ArgumentParser:
             help='Filter books by given filters'
         )
 
-        self.__parser.add_argument(
+        self.parser.add_argument(
             '-d',
             '--description',
             type=str,

@@ -1,12 +1,11 @@
 # 📚 Final Group Project: **Book Scraper**
-Book Scraper is a Python tool for extracting book information from [Books to Scrape](https://books.toscrape.com/). It offers robust filtering, sorting, and data manipulation features, including pintegration with Google Sheets for easy data export.
+Book Scraper is a Python tool for extracting book information from [Books to Scrape](https://books.toscrape.com/). It offers robust filtering, sorting, and a server-client architecture that allows remote input submission and result processing.
 
 ## 📖 Table of Contents
 - [Introduction](#-🌟-introduction)
 - [Features](#✨-features)
 - [Installation](#⚙️-installation)
 - [Usage](#🚀-usage)
-- [Technical Details for Google Sheets](#📝-technical-details-for-google-sheets)
 - [Testing](#🧪-testing)
 - [Contributing](#🤝-contributing)
 
@@ -16,7 +15,7 @@ Book Scraper is a Python tool for extracting book information from [Books to Scr
 - Extract detailed information about books.
 - Apply filters such as rating, price, and availability.
 - Sort results dynamically.
-- Export data to **Google Sheets** or save it as a **JSON** file.
+- Save the data as a **JSON** file.
 
 For a complete list of options, refer to the [Usage](#🚀-usage) section.
 
@@ -34,8 +33,12 @@ For a complete list of options, refer to the [Usage](#🚀-usage) section.
   - By title
   - Using keywords in descriptions
 - Export data to:
-  - **Google Sheets**
   - **JSON** files for local storage.
+
+### Server-Client Features:
+1. The client submits input data (arguments).
+2. The server processes the local algorithm using the submitted data.
+3. The server returns the results to the client.
 
 ## ⚙️ Installation
 ### Prerequisites:
@@ -62,9 +65,8 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Set up Google Sheets API credentials. Refer to the [Technical Details for Google Sheets](#📝-technical-details-for-google-sheets) section.
-
 ## 🚀 Usage
+### Local Execution:
 Run **Book Scraper** with various options:
 
 ```
@@ -96,28 +98,33 @@ For detailed help:
 python main.py -h
 ```
 
-## 📝 Technical Details for Google Sheets
-### Setup:
-1. Enable the Google Sheets API:
-   - Follow this guide to enable the API.
-2. Create service account credentials:
-   - Save the JSON key file (e.g., gsheets-credentials.json).
-3. Set the environment variable:
+### Server-Client Workflow:
+### Steps:
+1. Start the server
+
+Run the following command to start the server:
+```
+python server.py
+```
+The server will listen on localhost:8080.
+
+2. Submit a client request
+
+Use the client application to send input arguments (e.g., number of books, genre, sort parameters, filter parameters, etc.), just like the local execution. Here is example of client application:
 
 ```
-export GOOGLE_SHEETS_KEY=/path/to/gsheets-credentials.json
+python client.py -b 10 -g "Science"
 ```
+3. Receive results
 
-_(On Windows, use set instead of export.)_ 
-
-### Export Data:
-After scraping, use the following function to write data to a Google Sheet:
+The server processes the request and returns a JSON file with the scraped data:
 
 ```
-GoogleSheetsHandler.write_to_worksheet(scraped_books)
+[
+    {"title": "Book 1", "author": "Author 1", "genre": "Science", "price": 15.99},
+    {"title": "Book 2", "author": "Author 2", "genre": "Science", "price": 20.99}
+]
 ```
-
-Ensure you configure **SAMPLE_SPREADSHEET_ID** within the script to point to your Google Sheet.
 
 ## 🧪 Testing
 Run the unit tests to validate functionality:
@@ -130,7 +137,7 @@ This will test key components like:
 
 - BookScraper functionality
 - Command-line argument parsing
-- Google Sheets integration
+- Server-client communication
 
 ## 🤝 Contributing
 We welcome contributions! Please follow these steps:

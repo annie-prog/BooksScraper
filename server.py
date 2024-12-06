@@ -1,42 +1,51 @@
+import json
+from module.modules.argument_parser import ArgumentParser
+from module.modules.book_scraper import BookScraper
 import socket
-from threading import Thread
-
-def scraper_task(task_id):
-    print(f"Executing task {task_id}...")
-
-def handle_client(conn):
-    try:
-        data = conn.recv(1024).decode()
-        if not data:
-            return
-        num_threads = int(data)
-        print(f"Received number of threads: {num_threads}")
-
-        threads = []
-        for i in range(num_threads):
-            thread = Thread(target=scraper_task, args=(i,))
-            threads.append(thread)
-            thread.start()
-
-        for thread in threads:
-            thread.join()
-
-        conn.send("Scraper tasks completed!".encode())
-    except Exception as e:
-        print(f"Error: {e}")
-    finally:
-        conn.close()
 
 def start_server():
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind(("localhost", 8080))
-    server.listen(5)
-    print("Server listening on port 8080...")
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(("localhost", 8080))
+        s.listen(5)
+        print("Server listening on port 8080...")
 
-    while True:
-        conn, addr = server.accept()
-        print(f"Connected by {addr}")
-        Thread(target=handle_client, args=(conn,)).start()
+        conn, addr = s.accept()
+        with conn:
+            print(f"Connected by {addr}")
+
+            size_data = conn.recv(1024).decode('utf-8')
+            try:
+                data_size = int(size_data)
+                conn.sendall(b"SIZE_RECEIVED")
+            except ValueError:
+                print("Error: Invalid data size received.")
+                conn.sendall(b"SIZE_ERROR")
+                return
+
+            received_data = b""
+            while len(received_data) < data_size:
+                chunk = conn.recv(4096)
+                if not chunk:
+                    break
+                received_data += chunk
+            
+            try:
+                input_arguments = json.loads(received_data.decode('utf-8'))
+                print(f"Received input arguments: {input_arguments}")
+
+                argument_parser = ArgumentParser()
+                parsed_args = argument_parser.parser.parse_args(input_arguments)
+
+                book_scraper = BookScraper(parsed_args)
+                books_info = book_scraper.scrape_books()
+
+                with open('data.json', 'r', encoding='utf-8') as f:
+                    books_data = f.read()
+
+                conn.sendall(books_data.encode('utf-8'))
+                print("Books data sent to the client.")
+            except Exception as e:
+                conn.sendall(b"Error processing request.")
 
 if __name__ == "__main__":
     start_server()
