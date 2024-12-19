@@ -1,11 +1,12 @@
 # 📚 Final Group Project: **Book Scraper**
-Book Scraper is a Python tool for extracting book information from [Books to Scrape](https://books.toscrape.com/). It offers robust filtering, sorting, and a server-client architecture that allows remote input submission and result processing.
+Book Scraper is a Python tool for extracting book information from [Books to Scrape](https://books.toscrape.com/). It offers robust filtering, sorting, and a server-client architecture that allows remote input submission and dynamic data processing.
 
 ## 📖 Table of Contents
 - [Introduction](#-🌟-introduction)
 - [Features](#✨-features)
 - [Installation](#⚙️-installation)
 - [Usage](#🚀-usage)
+- [Server-Client Workflow](#🌐-server-client-workflow)
 - [Testing](#🧪-testing)
 - [Contributing](#🤝-contributing)
 
@@ -36,9 +37,10 @@ For a complete list of options, refer to the [Usage](#🚀-usage) section.
   - **JSON** files for local storage.
 
 ### Server-Client Features:
-1. The client submits input data (arguments).
-2. The server processes the local algorithm using the submitted data.
-3. The server returns the results to the client.
+1. Client submits input data (arguments).
+2. Server processes the web scraping algorithm using the submitted data.
+3. Client submits number of lines to be returned from the server.
+4. Server returns the results to the client.
 
 ## ⚙️ Installation
 ### Prerequisites:
@@ -98,7 +100,7 @@ For detailed help:
 python main.py -h
 ```
 
-### Server-Client Workflow:
+### 🌐 Server-Client Workflow:
 ### Steps:
 1. Start the server
 
@@ -113,17 +115,31 @@ The server will listen on localhost:8080.
 Use the client application to send input arguments (e.g., number of books, genre, sort parameters, filter parameters, etc.), just like the local execution. Here is example of client application:
 
 ```
-python client.py -b 10 -g "Science"
+python client.py -b 2 -g "Fantasy"
 ```
-3. Receive results
+3. Specify number of entries
 
-The server processes the request and returns a JSON file with the scraped data:
+The client can request a specific number of book entries by entering a value after the server is started.
+
+```
+Enter the number of lines to retrieve from the server: N
+```
+
+4. Receive results
+
+The server processes the request and returns a JSON-formatted response containing the requested number of book entries:
 
 ```
 [
-    {"title": "Book 1", "author": "Author 1", "genre": "Science", "price": 15.99},
-    {"title": "Book 2", "author": "Author 2", "genre": "Science", "price": 20.99}
-]
+    {
+        "title": "Saga, Volume 6 (Saga (Collected Editions) #6)",
+        "genre": "Fantasy",
+        "price": "£25.02",
+        "rating": 3,
+        "availability": "In stock (16 available)",
+        "description": "After a dramatic time jump, the three-time Eisner Award winner for Best Continuing Series continues to evolve, as Hazel begins the most exciting adventure of her life: kindergarten. Meanwhile, her star-crossed family learns hard lessons of their own.Collects SAGA #31-36"
+    },
+    {
 ```
 
 ## 🧪 Testing
